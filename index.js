@@ -1,4 +1,4 @@
-import { saveTask, getTasks,onGetTasks } from './firebase.js'
+import { saveTask, getTasks,onGetTasks,deleteTasks } from './firebase.js'
 
 const taskForm = document.getElementById('task-form')
 const tasksContainer = document.getElementById('tasks-container')
@@ -24,7 +24,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
         btnsDelete.forEach(btn =>{
             btn.addEventListener('click', ({target:{dataset}}) =>{
-                console.log(dataset.id)
+                deleteTasks(dataset.id)
             })
         })
     })   
