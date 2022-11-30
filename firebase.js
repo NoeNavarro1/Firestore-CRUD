@@ -1,19 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-import {
-  getFirestore, 
-  collection, 
-  addDoc, 
-  getDocs,  
-  deleteDoc,
-  onSnapshot,
-  doc,
-  getDoc,
-  updateDoc 
-} from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js"
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
+import { collection, getFirestore, addDoc, getDocs, 
+        onSnapshot, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyA5TDivq-zgMxKeVZHyb6ImC31Iw3Ex6RA",
@@ -27,17 +16,42 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-const db = getFirestore()
+const db = getFirestore();
 
-export const saveTask = (title, description) => 
-    addDoc(collection(db,"tasks"),{title,description});
+const storage = getStorage(app);
 
-export const getTasks = () => getDocs(collection(db,'tasks')) 
+export const saveTask = (title, description, imageUrl) => addDoc(collection(db, 'tasks'), { title, description, imageUrl });
 
-export const onGetTasks =  (callback) => onSnapshot(collection(db,'tasks'),callback)
+export const getTasks = () => getDocs(collection(db, 'tasks'));
 
-export const deleteTasks = id => deleteDoc(doc(db,'tasks',id))
+export const onGetTasks = callback => onSnapshot(collection(db, 'tasks'), callback);
 
-export const getTask = id => getDoc(doc(db,'tasks',id)) 
+export const deleteTask = id => deleteDoc(doc(db, 'tasks', id));
 
-export const updateTask = (id,newFields) => updateDoc(doc(db,'tasks',id),newFields) 
+export const getTask = id => getDoc(doc(db, 'tasks', id));
+
+export const updateTask = (id, newFields) => updateDoc(doc(db, 'tasks', id), newFields);
+
+export const saveImage = file => {
+  console.log(file);
+  const storageRef = ref(storage, `imagenes/${file.name}`);
+  
+  const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on('state_changed', 
+    (snapshot) => {
+    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+   document.querySelector('#progress').value = progress;
+    },
+    (error) => {
+        
+    }, 
+    () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        document.querySelector('#image').src = downloadURL;
+        console.log('File available at', downloadURL);
+        });
+    }
+    );
+
+  }
