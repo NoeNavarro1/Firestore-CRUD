@@ -1,5 +1,5 @@
 import { saveTask, onGetTasks, deleteTask, getTask, updateTask,
-    saveImage } from './firebase.js';
+    saveImage, storage} from './firebase.js';
   import { card } from './ui.js';
   
   const formTask = document.querySelector('#task-form');
@@ -73,3 +73,4 @@ import { saveTask, onGetTasks, deleteTask, getTask, updateTask,
   formTask.addEventListener('submit', saveSubmit);
   document.querySelector('#file-task').addEventListener('change', uploadFileAction);
   });
+

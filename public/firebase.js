@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore();
 
-const storage = getStorage(app);
+export const storage = getStorage(app);
 
 export const saveTask = (title, description, imageUrl) => addDoc(collection(db, 'tasks'), { title, description, imageUrl });
 
