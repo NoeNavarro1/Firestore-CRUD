@@ -32,8 +32,6 @@ export const getTask = id => getDoc(doc(db, 'tasks', id));
 
 export const updateTask = (id, newFields) => updateDoc(doc(db, 'tasks', id), newFields);
 
-
-
 export const saveImage = file => {
   console.log(file);
   const storageRef = ref(storage, `imagenes/${file.name}`);
