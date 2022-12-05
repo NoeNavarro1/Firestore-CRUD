@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
 import { collection, getFirestore, addDoc, getDocs, 
         onSnapshot, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytesResumable, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
+import { getStorage, ref, uploadBytesResumable, uploadBytes, getDownloadURL,deleteObject } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-storage.js";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyA5TDivq-zgMxKeVZHyb6ImC31Iw3Ex6RA",
@@ -20,7 +20,7 @@ const db = getFirestore();
 
 export const storage = getStorage(app);
 
-export const saveTask = (title, description, imageUrl) => addDoc(collection(db, 'tasks'), { title, description, imageUrl });
+export const saveTask = (title, description, imageUrl, imageName) => addDoc(collection(db, 'tasks'), { title, description, imageUrl, imageName });
 
 export const getTasks = () => getDocs(collection(db, 'tasks'));
 
@@ -54,4 +54,18 @@ export const saveImage = file => {
     }
     );
 
+  }
+
+  const deleteImageTask = imageName =>{
+    // Create a reference to the file to delete
+const desertRef = ref(storage, `images/${imageName}`);
+
+// Delete the file
+deleteObject(desertRef).then(() => {
+  // File deleted successfully
+  console.log('Todo esta bien')
+}).catch((error) => {
+  // Uh-oh, an error occurred!
+  console.log('Algo fallo UnU')
+});
   }
