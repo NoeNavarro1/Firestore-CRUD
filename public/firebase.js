@@ -26,7 +26,11 @@ export const getTasks = () => getDocs(collection(db, 'tasks'));
 
 export const onGetTasks = callback => onSnapshot(collection(db, 'tasks'), callback);
 
-export const deleteTask = id => deleteDoc(doc(db, 'tasks', id));
+export const deleteTask = async id => {
+  const docTask = await getTask(id);
+  deleteImageTask(docTask.data().imageName);
+  deleteDoc(doc(db, 'tasks', id));
+}
 
 export const getTask = id => getDoc(doc(db, 'tasks', id));
 
